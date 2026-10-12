@@ -1,0 +1,25 @@
+# Deny all.
+*
+
+# Whitelist.
+!.gitignore
+
+!LICENSE
+!requirements.txt
+!README.md
+
+# Scripts.
+!*/
+!*/**/*.py
+
+# Test resources.
+!src/resources/intro_cut.mp4
+
+# Blacklist
+src/custom_psj
+src/custom_psj_islr
+src/wlasl100
+src/labels
+src/result
+src/tracks
+src/videos
