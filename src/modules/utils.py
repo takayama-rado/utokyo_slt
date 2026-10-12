@@ -150,16 +150,39 @@ def save_checkpoint(ckpt_path, model,
                     scheduler=None):
     model_to_save = model.module if hasattr(model, "module") else model
     checkpoint = {}
-    checkpoint = {
-        "model": model_to_save.state_dict(),
-        "epoch": epoch,
-        "random": random.getstate(),
-        "np_random": np.random.get_state(),
-        "torch": torch.get_rng_state(),
-        "torch_random": torch.random.get_rng_state(),
-        "cuda_random": torch.cuda.get_rng_state(),
-        "cuda_random_all": torch.cuda.get_rng_state_all(),
-    }
+    if torch.cuda.is_available():
+        checkpoint = {
+            "model": model_to_save.state_dict(),
+            "epoch": epoch,
+            "random": random.getstate(),
+            "np_random": np.random.get_state(),
+            "torch": torch.get_rng_state(),
+            "torch_random": torch.random.get_rng_state(),
+            "gpu_random": torch.cuda.get_rng_state(),
+            "gpu_random_all": torch.cuda.get_rng_state_all(),
+        }
+    elif torch.mps.is_available():
+        checkpoint = {
+            "model": model_to_save.state_dict(),
+            "epoch": epoch,
+            "random": random.getstate(),
+            "np_random": np.random.get_state(),
+            "torch": torch.get_rng_state(),
+            "torch_random": torch.random.get_rng_state(),
+            "gpu_random": torch.mps.get_rng_state(),
+            "gpu_random_all": None,
+        }
+    else:
+        checkpoint = {
+            "model": model_to_save.state_dict(),
+            "epoch": epoch,
+            "random": random.getstate(),
+            "np_random": np.random.get_state(),
+            "torch": torch.get_rng_state(),
+            "torch_random": torch.random.get_rng_state(),
+            "gpu_random": None,
+            "gpu_random_all": None,
+        }
     if optimizer is not None:
         checkpoint["optimizer"] = optimizer.state_dict()
     if scheduler is not None:
@@ -183,8 +206,11 @@ def load_checkpoint(ckpt_path, model,
     torch.set_rng_state(checkpoint["torch"])
     torch.random.set_rng_state(checkpoint["torch_random"])
     try:
-        torch.cuda.set_rng_state(checkpoint["cuda_random"])
-        torch.cuda.torch.cuda.set_rng_state_all(checkpoint["cuda_random_all"])
+        if torch.cuda.is_available():
+            torch.cuda.set_rng_state(checkpoint["gpu_random"])
+            torch.cuda.set_rng_state_all(checkpoint["gpu_random_all"])
+        elif torch.mps.is_available():
+            torch.mps.set_rng_state(checkpoint["gpu_random"])
     except Exception as inst:
         print("Info: The original model is trained with CPU. "
               "If it intended, you can ignore bellow exception.")

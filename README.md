@@ -59,7 +59,7 @@ virtualenv -p python312 <your_venv_directory>
 次のコマンドで環境変数を設定して，スクリプト内のモジュールにアクセスできるようにします．
 
 ``` .shell
-export PYTHONPATH=${PYTHONPATH}:<utokyo_slt_root>/src/modules
+export PYTHONPATH=${PYTHONPATH}:<utokyo_slt_root>/src
 ```
 
 なお，`export` コマンドは一時的な設定ですので，`shell` を新たに立ち上げた場合は再設定する必要があります．永続的に設定したい場合は，システム側の環境変数設定を編集してください．
