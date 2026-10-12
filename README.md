@@ -54,6 +54,16 @@ virtualenv -p python312 <your_venv_directory>
 # Other commands are the same...
 ```
 
+### 環境変数の設定
+
+次のコマンドで環境変数を設定して，スクリプト内のモジュールにアクセスできるようにします．
+
+``` .shell
+export PYTHONPATH=${PYTHONPATH}:<utokyo_slt_root>/src/modules
+```
+
+なお，`export` コマンドは一時的な設定ですので，`shell` を新たに立ち上げた場合は再設定する必要があります．永続的に設定したい場合は，システム側の環境変数設定を編集してください．
+
 ### (オプション) 孤立手話単語認識向け custom_psj の設定
 
 `custom_psj` には，複合語などの複数単語を含むデータが含まれています．このデータセットはそのまま孤立手話単語認識の学習に使用することはできません．
