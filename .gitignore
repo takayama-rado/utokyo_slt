@@ -12,6 +12,10 @@
 !*/
 !*/**/*.py
 
+# Mediapipe models.
+!src/modules/holistic_models/*.task
+!src/modules/pose_models/*.task
+
 # Test resources.
 !src/resources/intro_cut.mp4
 
